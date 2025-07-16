@@ -1,5 +1,5 @@
 """
-CIFAR-10 and CIFAR-100 datasets with Parquet format support.
+CIFAR-10 and CIFAR-100 datasets with Hugging Face Parquet format support.
 """
 
 import numpy as np
@@ -7,10 +7,23 @@ from typing import Tuple
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from .base_dataset import BaseDataset
+from .hf_parquet_dataset import HFParquetDataset
 
 
-class CIFAR10Dataset(BaseDataset):
-    """CIFAR-10 dataset with Parquet format support."""
+class CIFAR10Dataset(HFParquetDataset):
+    """CIFAR-10 dataset with Hugging Face Parquet format support."""
+    
+    @property
+    def dataset_name(self) -> str:
+        return "cifar10"
+    
+    @property
+    def parquet_url(self) -> str:
+        return "https://huggingface.co/datasets/hibana2077/CV-dataset-all-in-parquet/resolve/main/datasets/cifar10.parquet?download=true"
+
+
+class CIFAR10DatasetLegacy(BaseDataset):
+    """CIFAR-10 dataset with legacy Parquet format support."""
     
     @property
     def dataset_name(self) -> str:
@@ -46,8 +59,20 @@ class CIFAR10Dataset(BaseDataset):
         ]
 
 
-class CIFAR100Dataset(BaseDataset):
-    """CIFAR-100 dataset with Parquet format support."""
+class CIFAR100Dataset(HFParquetDataset):
+    """CIFAR-100 dataset with Hugging Face Parquet format support."""
+    
+    @property
+    def dataset_name(self) -> str:
+        return "cifar100"
+    
+    @property
+    def parquet_url(self) -> str:
+        return "https://huggingface.co/datasets/hibana2077/CV-dataset-all-in-parquet/resolve/main/datasets/cifar100.parquet?download=true"
+
+
+class CIFAR100DatasetLegacy(BaseDataset):
+    """CIFAR-100 dataset with legacy Parquet format support."""
     
     @property
     def dataset_name(self) -> str:

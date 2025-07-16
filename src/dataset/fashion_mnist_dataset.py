@@ -1,15 +1,28 @@
 """
-Fashion-MNIST dataset with Parquet format support.
+Fashion-MNIST dataset with Hugging Face Parquet format support.
 """
 
 import numpy as np
 from typing import Tuple
 import torchvision.datasets as datasets
 from .base_dataset import BaseDataset
+from .hf_parquet_dataset import HFParquetDataset
 
 
-class FashionMNISTDataset(BaseDataset):
-    """Fashion-MNIST dataset with Parquet format support."""
+class FashionMNISTDataset(HFParquetDataset):
+    """Fashion-MNIST dataset with Hugging Face Parquet format support."""
+    
+    @property
+    def dataset_name(self) -> str:
+        return "fashion_mnist"
+    
+    @property
+    def parquet_url(self) -> str:
+        return "https://huggingface.co/datasets/hibana2077/CV-dataset-all-in-parquet/resolve/main/datasets/fashion_mnist.parquet?download=true"
+
+
+class FashionMNISTDatasetLegacy(BaseDataset):
+    """Fashion-MNIST dataset with legacy Parquet format support."""
     
     @property
     def dataset_name(self) -> str:

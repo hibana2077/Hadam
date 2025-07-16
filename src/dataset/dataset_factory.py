@@ -68,7 +68,6 @@ def get_dataset(
     transform: Optional[transforms.Compose] = None,
     target_transform: Optional[transforms.Compose] = None,
     download: bool = True,
-    use_parquet: bool = True,
     **kwargs
 ) -> Dataset:
     """
@@ -81,7 +80,6 @@ def get_dataset(
         transform: Transform to apply to images (if None, use default)
         target_transform: Transform to apply to targets
         download: If True, download dataset if not found
-        use_parquet: If True, use/create Parquet format
         **kwargs: Additional arguments for dataset
     
     Returns:
@@ -111,7 +109,6 @@ def get_dataset(
         transform=transform,
         target_transform=target_transform,
         download=download,
-        use_parquet=use_parquet,
         **kwargs
     )
 

@@ -1,15 +1,28 @@
 """
-SVHN dataset with Parquet format support.
+SVHN dataset with Hugging Face Parquet format support.
 """
 
 import numpy as np
 from typing import Tuple
 import torchvision.datasets as datasets
 from .base_dataset import BaseDataset
+from .hf_parquet_dataset import HFParquetDataset
 
 
-class SVHNDataset(BaseDataset):
-    """SVHN dataset with Parquet format support."""
+class SVHNDataset(HFParquetDataset):
+    """SVHN dataset with Hugging Face Parquet format support."""
+    
+    @property
+    def dataset_name(self) -> str:
+        return "svhn"
+    
+    @property
+    def parquet_url(self) -> str:
+        return "https://huggingface.co/datasets/hibana2077/CV-dataset-all-in-parquet/resolve/main/datasets/svhn.parquet?download=true"
+
+
+class SVHNDatasetLegacy(BaseDataset):
+    """SVHN dataset with legacy Parquet format support."""
     
     @property
     def dataset_name(self) -> str:
