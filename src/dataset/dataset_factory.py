@@ -9,6 +9,7 @@ from torch.utils.data import Dataset
 from .cifar_dataset import CIFAR10Dataset, CIFAR100Dataset
 from .svhn_dataset import SVHNDataset
 from .fashion_mnist_dataset import FashionMNISTDataset
+from .hf_parquet_dataset import HFParquetDataset
 
 
 def get_default_transforms(dataset_name: str, train: bool = True) -> transforms.Compose:
@@ -68,6 +69,7 @@ def get_dataset(
     transform: Optional[transforms.Compose] = None,
     target_transform: Optional[transforms.Compose] = None,
     download: bool = True,
+    use_parquet: bool = True,  # Added parameter
     **kwargs
 ) -> Dataset:
     """
@@ -80,6 +82,7 @@ def get_dataset(
         transform: Transform to apply to images (if None, use default)
         target_transform: Transform to apply to targets
         download: If True, download dataset if not found
+        use_parquet: If True, use Parquet format (ignored, kept for compatibility)
         **kwargs: Additional arguments for dataset
     
     Returns:
@@ -102,6 +105,9 @@ def get_dataset(
         raise ValueError(f"Unknown dataset: {name}. Available: {list(dataset_classes.keys())}")
     
     dataset_class = dataset_classes[name]
+    
+    # Remove use_parquet from kwargs as HFParquetDataset doesn't accept it
+    kwargs.pop('use_parquet', None)
     
     return dataset_class(
         root=root,
