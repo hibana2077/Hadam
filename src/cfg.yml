@@ -21,6 +21,7 @@ adam:
   weight_decay: 0
 
 enable_progress_bar: true
+mode: "train" # train, download, full
 train: true
 eval: true
 only_download_dataset: false
