@@ -18,7 +18,7 @@ def create_data_loaders(
     pin_memory: bool = True,
     use_parquet: bool = True,
     custom_transform: Optional[transforms.Compose] = None,
-    download: bool = False  # Changed default to False for HPC usage
+    download: bool = True  # Enable auto-download by default
 ) -> Tuple[DataLoader, DataLoader]:
     """
     Create train and test data loaders for a dataset.
@@ -31,7 +31,7 @@ def create_data_loaders(
         pin_memory: If True, pin memory for faster GPU transfer
         use_parquet: If True, use Parquet format
         custom_transform: Custom transform to use instead of default
-        download: If True, download dataset if not found (False for HPC)
+        download: If True, download dataset if not found (True by default)
     
     Returns:
         Tuple of (train_loader, test_loader)

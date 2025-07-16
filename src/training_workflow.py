@@ -23,14 +23,15 @@ def train_model(config: dict, device: torch.device):
     print(f"  Classes: {dataset_info['num_classes']}")
     print(f"  Input shape: {dataset_info['input_shape']}")
     
-    # Create data loaders (no download, use existing Parquet files)
+    # Create data loaders (download if needed)
     print("\nLoading data from Parquet files...")
     train_loader, test_loader = create_data_loaders(
         dataset_name=dataset_name,
         data_root="./data",
         batch_size=config['batch_size'],
         num_workers=4,
-        use_parquet=True
+        use_parquet=True,
+        download=True  # Enable auto-download
     )
     
     # Print dataset statistics

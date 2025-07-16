@@ -53,10 +53,16 @@ class HFParquetDataset(Dataset, ABC):
             self._load_from_parquet()
         else:
             if download:
-                self._download_parquet()
-                self._load_from_parquet()
+                try:
+                    self._download_parquet()
+                    self._load_from_parquet()
+                except Exception as e:
+                    # Clean up partially downloaded file if it exists
+                    if self.parquet_path.exists():
+                        self.parquet_path.unlink()
+                    raise RuntimeError(f"Failed to download dataset: {e}")
             else:
-                raise FileNotFoundError(f"Dataset not found at {self.parquet_path}")
+                raise FileNotFoundError(f"Dataset not found at {self.parquet_path}. Set download=True to download automatically.")
     
     @property
     @abstractmethod
@@ -73,15 +79,36 @@ class HFParquetDataset(Dataset, ABC):
     def _download_parquet(self):
         """Download parquet file from Hugging Face."""
         print(f"Downloading {self.dataset_name} from Hugging Face...")
+        print(f"URL: {self.parquet_url}")
+        print(f"Target: {self.parquet_path}")
         
-        response = requests.get(self.parquet_url, stream=True)
-        response.raise_for_status()
-        
-        with open(self.parquet_path, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        
-        print(f"Dataset downloaded to {self.parquet_path}")
+        try:
+            response = requests.get(self.parquet_url, stream=True)
+            response.raise_for_status()
+            
+            # Get file size if available
+            total_size = int(response.headers.get('content-length', 0))
+            downloaded_size = 0
+            
+            with open(self.parquet_path, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:  # Filter out keep-alive chunks
+                        f.write(chunk)
+                        downloaded_size += len(chunk)
+                        
+                        # Show progress for large files
+                        if total_size > 0 and downloaded_size % (1024 * 1024) == 0:  # Every MB
+                            progress = (downloaded_size / total_size) * 100
+                            print(f"Progress: {progress:.1f}% ({downloaded_size / (1024*1024):.1f} MB)")
+            
+            print(f"Dataset downloaded successfully to {self.parquet_path}")
+            
+        except requests.exceptions.RequestException as e:
+            raise RuntimeError(f"Network error while downloading dataset: {e}")
+        except IOError as e:
+            raise RuntimeError(f"File I/O error while downloading dataset: {e}")
+        except Exception as e:
+            raise RuntimeError(f"Unexpected error while downloading dataset: {e}")
     
     def _load_from_parquet(self):
         """Load data from Hugging Face parquet file."""
