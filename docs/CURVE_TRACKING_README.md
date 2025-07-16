@@ -20,6 +20,7 @@
 ## 檔案輸出格式
 
 ### 個別 txt 檔案
+
 - `{opt}-{dataset}-{date}-train_loss.txt`: 訓練 loss 曲線
 - `{opt}-{dataset}-{date}-train_acc.txt`: 訓練 accuracy 曲線
 - `{opt}-{dataset}-{date}-eval_loss.txt`: 驗證 loss 曲線
