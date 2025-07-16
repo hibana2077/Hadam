@@ -99,7 +99,7 @@ class HFParquetDataset(Dataset, ABC):
                         # Show progress for large files
                         if total_size > 0 and downloaded_size % (1024 * 1024) == 0:  # Every MB
                             progress = (downloaded_size / total_size) * 100
-                            print(f"Progress: {progress:.1f}% ({downloaded_size / (1024*1024):.1f} MB)")
+                            # print(f"Progress: {progress:.1f}% ({downloaded_size / (1024*1024):.1f} MB)")
             
             print(f"Dataset downloaded successfully to {self.parquet_path}")
             
